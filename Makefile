@@ -1,7 +1,8 @@
 # Директории
 PROTO_SRC_DIR := api
-OUT_DIR := pkg
 GOOGLE_API_DIR := $(PROTO_SRC_DIR)/google
+OUT_DIR := pkg
+OUT_OPEN_API_DIR := docs
 
 # Список всех proto файлов
 PROTO_FILES := $(shell find $(PROTO_SRC_DIR) -name "*.proto" | grep -vE '^$(PROTO_SRC_DIR)/google')
@@ -13,7 +14,7 @@ dirs:
 	@mkdir -p $(OUT_DIR)/cat_admin_v1
 	@echo "📁 Output directories created: $(OUT_DIR)/cat_v1 and $(OUT_DIR)/cat_admin_v1"
 
-# Основная команда для генерации gRPC и REST кода
+# Основная команда для генерации gRPC, REST и Swagger (OpenAPI) файлов
 .PHONY: all
 all: dirs
 	@for proto_file in $(PROTO_FILES); do \
@@ -23,9 +24,11 @@ all: dirs
 			--go_out=paths=source_relative:$(OUT_DIR) \
 			--go-grpc_out=paths=source_relative:$(OUT_DIR) \
 			--grpc-gateway_out=paths=source_relative:$(OUT_DIR) \
+			--openapiv2_out=logtostderr=true:$(OUT_OPEN_API_DIR) \
 			$$proto_file; \
 	done
 	@echo "✅ All proto files processed successfully in $(OUT_DIR)"
+	@echo "✅ All open api files processed successfully in $(OUT_OPEN_API_DIR)"
 
 # Цель для скачивания необходимых Google API файлов
 ANNOTATIONS_PROTO := $(GOOGLE_API_DIR)/api/annotations.proto

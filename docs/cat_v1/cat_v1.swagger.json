@@ -1,0 +1,266 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "cat_v1/cat_v1.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "CatService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/cat/feed": {
+      "post": {
+        "summary": "Покормить котика. Отвечает, доволен он или нет",
+        "operationId": "CatService_Feed",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/cat_v1FeedResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/cat_v1FeedRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CatService"
+        ]
+      }
+    },
+    "/v1/cat/open_door": {
+      "post": {
+        "summary": "Открыть дверь для кота (и через 3 секунды повторить)",
+        "operationId": "CatService_OpenDoor",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/cat_v1OpenDoorResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/cat_v1OpenDoorRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CatService"
+        ]
+      }
+    },
+    "/v1/cat/{id}/pet": {
+      "post": {
+        "summary": "Реакция на поглаживание",
+        "operationId": "CatService_Pet",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/cat_v1PetResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Идентификатор кота",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CatServicePetBody"
+            }
+          }
+        ],
+        "tags": [
+          "CatService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "CatServicePetBody": {
+      "type": "object",
+      "title": "Запрос поглаживания"
+    },
+    "cat_v1CatMood": {
+      "type": "string",
+      "enum": [
+        "MOOD_UNKNOWN",
+        "MOOD_HAPPY",
+        "MOOD_ANGRY",
+        "MOOD_CONTENT",
+        "MOOD_PLAYFUL",
+        "MOOD_CALM"
+      ],
+      "default": "MOOD_UNKNOWN",
+      "description": "- MOOD_UNKNOWN: Неизвестно\n - MOOD_HAPPY: Счастлив\n - MOOD_ANGRY: Злой\n - MOOD_CONTENT: Доволен\n - MOOD_PLAYFUL: Игривый\n - MOOD_CALM: Спокойный",
+      "title": "CatMood настроения кота"
+    },
+    "cat_v1DoorStatus": {
+      "type": "string",
+      "enum": [
+        "DOOR_UNKNOWN",
+        "DOOR_THINKING",
+        "DOOR_ENTERING",
+        "DOOR_EXITED"
+      ],
+      "default": "DOOR_UNKNOWN",
+      "description": "- DOOR_UNKNOWN: Неизвестно\n - DOOR_THINKING: Стоит в дверях и думает\n - DOOR_ENTERING: Входит обратно\n - DOOR_EXITED: Покинул помещение",
+      "title": "DoorStatus статус двери"
+    },
+    "cat_v1FeedReaction": {
+      "type": "string",
+      "enum": [
+        "REACTION_UNKNOWN",
+        "REACTION_MEOW",
+        "REACTION_PURR",
+        "REACTION_HISS",
+        "REACTION_GROWL",
+        "REACTION_SNIFF_AND_LEAVE"
+      ],
+      "default": "REACTION_UNKNOWN",
+      "description": "- REACTION_UNKNOWN: Неизвестно\n - REACTION_MEOW: Мяу\n - REACTION_PURR: Урчит\n - REACTION_HISS: Фыркает\n - REACTION_GROWL: Рычит\n - REACTION_SNIFF_AND_LEAVE: Понюхал и ушёл",
+      "title": "FeedReaction реакция кота на кормление"
+    },
+    "cat_v1FeedRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64",
+          "title": "Идентификатор кота"
+        },
+        "foodType": {
+          "type": "string",
+          "title": "Тип еды"
+        },
+        "amount": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Количество еды"
+        }
+      },
+      "title": "Запрос кормления"
+    },
+    "cat_v1FeedResponse": {
+      "type": "object",
+      "properties": {
+        "reaction": {
+          "$ref": "#/definitions/cat_v1FeedReaction",
+          "title": "Реакция кота"
+        }
+      },
+      "title": "Ответ на кормление"
+    },
+    "cat_v1OpenDoorRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64",
+          "title": "Идентификатор кота"
+        },
+        "destination": {
+          "type": "string",
+          "title": "Куда кот хочет выйти"
+        }
+      },
+      "title": "Запрос на открытие двери"
+    },
+    "cat_v1OpenDoorResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/cat_v1DoorStatus",
+          "title": "Текущий статус"
+        }
+      },
+      "title": "Ответ на открытие двери"
+    },
+    "cat_v1PetResponse": {
+      "type": "object",
+      "properties": {
+        "mood": {
+          "$ref": "#/definitions/cat_v1CatMood",
+          "title": "Настроение кота"
+        }
+      },
+      "title": "Ответ на поглаживание"
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}

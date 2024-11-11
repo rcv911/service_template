@@ -1,0 +1,316 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "cat_admin_v1/cat_admin_v1.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "CatAdminService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/cats": {
+      "get": {
+        "summary": "Получить список всех котов",
+        "operationId": "CatAdminService_ListCats",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/cat_admin_v1ListCatsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "page",
+            "description": "Номер страницы (для пагинации)",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageSize",
+            "description": "Количество котов на странице",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "CatAdminService"
+        ]
+      },
+      "post": {
+        "summary": "Создать нового кота",
+        "operationId": "CatAdminService_CreateCat",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/cat_admin_v1CatResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/cat_admin_v1CreateCatRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CatAdminService"
+        ]
+      }
+    },
+    "/v1/cats/{id}": {
+      "get": {
+        "summary": "Получить информацию о коте по его ID",
+        "operationId": "CatAdminService_GetCat",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/cat_admin_v1CatResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Идентификатор кота",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "CatAdminService"
+        ]
+      },
+      "delete": {
+        "summary": "Удалить кота по ID",
+        "operationId": "CatAdminService_DeleteCat",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/cat_admin_v1DeleteCatResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Идентификатор кота",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "CatAdminService"
+        ]
+      },
+      "put": {
+        "summary": "Обновить информацию о коте",
+        "operationId": "CatAdminService_UpdateCat",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/cat_admin_v1CatResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Идентификатор кота",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CatAdminServiceUpdateCatBody"
+            }
+          }
+        ],
+        "tags": [
+          "CatAdminService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "CatAdminServiceUpdateCatBody": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Новое имя кота"
+        },
+        "age": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Новый возраст кота"
+        },
+        "color": {
+          "type": "string",
+          "title": "Новый цвет шерсти"
+        }
+      },
+      "title": "Запрос на обновление информации о коте"
+    },
+    "cat_admin_v1CatResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64",
+          "title": "Идентификатор кота"
+        },
+        "name": {
+          "type": "string",
+          "title": "Имя кота"
+        },
+        "age": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Возраст кота"
+        },
+        "color": {
+          "type": "string",
+          "title": "Цвет шерсти"
+        }
+      },
+      "title": "Ответ с данными о коте"
+    },
+    "cat_admin_v1CreateCatRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Имя кота"
+        },
+        "age": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Возраст кота"
+        },
+        "color": {
+          "type": "string",
+          "title": "Цвет шерсти"
+        }
+      },
+      "title": "Запрос на создание кота"
+    },
+    "cat_admin_v1DeleteCatResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "title": "Удален ли кот успешно"
+        }
+      },
+      "title": "Ответ на успешное удаление кота"
+    },
+    "cat_admin_v1ListCatsResponse": {
+      "type": "object",
+      "properties": {
+        "cats": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/cat_admin_v1CatResponse"
+          },
+          "title": "Список котов"
+        },
+        "totalCount": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Общее количество котов"
+        }
+      },
+      "title": "Ответ со списком котов"
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}

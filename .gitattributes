@@ -1,0 +1,6 @@
+* text=auto
+
+go.sum -diff
+mocks/* -diff
+pkg/cat_v1/* -diff
+pkg/cat_admin_v1/* -diff

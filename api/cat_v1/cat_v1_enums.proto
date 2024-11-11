@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package cat_v1;
+
+// Имя пакета, такое же как и в go.mod
+option go_package = "github.com/rcv911/service_template/pkg/cat_v1;cat_v1";
+
+// DoorStatus статус двери
+enum DoorStatus {
+  DOOR_UNKNOWN = 0;   // Неизвестно
+  DOOR_THINKING = 1;  // Стоит в дверях и думает
+  DOOR_ENTERING = 2;  // Входит обратно
+  DOOR_EXITED = 3;    // Покинул помещение
+}
+
+// FeedReaction реакция кота на кормление
+enum FeedReaction {
+  REACTION_UNKNOWN = 0;           // Неизвестно
+  REACTION_MEOW = 1;              // Мяу
+  REACTION_PURR = 2;              // Урчит
+  REACTION_HISS = 3;              // Фыркает
+  REACTION_GROWL = 4;             // Рычит
+  REACTION_SNIFF_AND_LEAVE = 5;   // Понюхал и ушёл
+}
+
+// CatMood настроения кота
+enum CatMood {
+  MOOD_UNKNOWN = 0;  // Неизвестно
+  MOOD_HAPPY = 1;    // Счастлив
+  MOOD_ANGRY = 2;    // Злой
+  MOOD_CONTENT = 3;  // Доволен
+  MOOD_PLAYFUL = 4;  // Игривый
+  MOOD_CALM = 5;     // Спокойный
+}

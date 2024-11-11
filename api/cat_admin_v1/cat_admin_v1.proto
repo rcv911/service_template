@@ -1,0 +1,98 @@
+syntax = "proto3";
+
+package cat_admin_v1;
+
+// Имя пакета, такое же как и в go.mod
+option go_package = "github.com/rcv911/service_template/pkg/cat_admin_v1;cat_admin_v1";
+
+import "google/api/annotations.proto";
+
+// Сервис CRUD операций для работы с котами
+service CatAdminService {
+  // Создать нового кота
+  rpc CreateCat (CreateCatRequest) returns (CatResponse) {
+    option (google.api.http) = {
+      post: "/v1/cats"
+      body: "*"
+    };
+  }
+
+  // Получить информацию о коте по его ID
+  rpc GetCat (GetCatRequest) returns (CatResponse) {
+    option (google.api.http) = {
+      get: "/v1/cats/{id}"
+    };
+  }
+
+  // Обновить информацию о коте
+  rpc UpdateCat (UpdateCatRequest) returns (CatResponse) {
+    option (google.api.http) = {
+      put: "/v1/cats/{id}"
+      body: "*"
+    };
+  }
+
+  // Удалить кота по ID
+  rpc DeleteCat (DeleteCatRequest) returns (DeleteCatResponse) {
+    option (google.api.http) = {
+      delete: "/v1/cats/{id}"
+    };
+  }
+
+  // Получить список всех котов
+  rpc ListCats (ListCatsRequest) returns (ListCatsResponse) {
+    option (google.api.http) = {
+      get: "/v1/cats"
+    };
+  }
+}
+
+// Запрос на создание кота
+message CreateCatRequest {
+  string name = 1;     // Имя кота
+  int32 age = 2;       // Возраст кота
+  string color = 3;    // Цвет шерсти
+}
+
+// Запрос на получение кота по ID
+message GetCatRequest {
+  int64 id = 1; // Идентификатор кота
+}
+
+// Запрос на обновление информации о коте
+message UpdateCatRequest {
+  int64 id = 1;       // Идентификатор кота
+  string name = 2;    // Новое имя кота
+  int32 age = 3;      // Новый возраст кота
+  string color = 4;   // Новый цвет шерсти
+}
+
+// Запрос на удаление кота
+message DeleteCatRequest {
+  int64 id = 1; // Идентификатор кота
+}
+
+// Ответ на успешное удаление кота
+message DeleteCatResponse {
+  bool success = 1; // Удален ли кот успешно
+}
+
+// Запрос на получение списка котов
+message ListCatsRequest {
+  int32 page = 1;       // Номер страницы (для пагинации)
+  int32 page_size = 2;  // Количество котов на странице
+}
+
+// Ответ с данными о коте
+message CatResponse {
+  int64 id = 1;       // Идентификатор кота
+  string name = 2;    // Имя кота
+  int32 age = 3;      // Возраст кота
+  string color = 4;   // Цвет шерсти
+}
+
+// Ответ со списком котов
+message ListCatsResponse {
+  repeated CatResponse cats = 1; // Список котов
+  int32 total_count = 2;         // Общее количество котов
+}

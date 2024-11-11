@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package cat_v1;
+
+// Имя пакета, такое же как и в go.mod
+option go_package = "github.com/rcv911/service_template/pkg/cat_v1;cat_v1";
+
+import "google/api/annotations.proto";
+import "cat_v1/cat_v1_enums.proto";
+
+// Сервис для котов: отвечает на типичные "запросы" котиков
+service CatService {
+  // Реакция на поглаживание
+  rpc Pet (PetRequest) returns (PetResponse) {
+    option (google.api.http) = {
+      post: "/v1/cat/{id}/pet"
+      body: "*"
+    };
+  }
+
+  // Покормить котика. Отвечает, доволен он или нет
+  rpc Feed (FeedRequest) returns (FeedResponse) {
+    option (google.api.http) = {
+      post: "/v1/cat/feed"
+      body: "*"
+    };
+  }
+
+  // Открыть дверь для кота (и через 3 секунды повторить)
+  rpc OpenDoor (OpenDoorRequest) returns (OpenDoorResponse) {
+    option (google.api.http) = {
+      post: "/v1/cat/open_door"
+      body: "*"
+    };
+  }
+}
+
+// Запрос поглаживания
+message PetRequest {
+  int64 id = 1; // Идентификатор кота
+}
+
+// Ответ на поглаживание
+message PetResponse {
+  CatMood mood = 1;     // Настроение кота
+}
+
+// Запрос кормления
+message FeedRequest {
+  int64 id = 1;         // Идентификатор кота
+  string food_type = 2; // Тип еды
+  int32 amount = 3;     // Количество еды
+}
+
+// Ответ на кормление
+message FeedResponse {
+  FeedReaction reaction = 1; // Реакция кота
+}
+
+// Запрос на открытие двери
+message OpenDoorRequest {
+  int64 id = 1;           // Идентификатор кота
+  string destination = 2; // Куда кот хочет выйти
+}
+
+// Ответ на открытие двери
+message OpenDoorResponse {
+  DoorStatus status = 2;   // Текущий статус
+}
+

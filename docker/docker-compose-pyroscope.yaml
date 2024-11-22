@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  pyroscope-server:
+    image: grafana/pyroscope:latest
+    container_name: pyroscope-server
+    ports:
+      - "4040:4040"
+    environment:
+      - PYROSCOPE_LOG_LEVEL=warn
+      - PYROSCOPE_STORAGE_PATH=/var/lib/pyroscope
+    volumes:
+      - pyroscope-data:/var/lib/pyroscope
+
+volumes:
+  pyroscope-data:

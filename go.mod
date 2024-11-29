@@ -8,6 +8,7 @@ require (
 	github.com/gin-gonic/gin v1.10.0
 	github.com/grafana/pyroscope-go v1.2.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.23.0
+	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.20.5
 	github.com/rs/zerolog v1.33.0
 	github.com/swaggo/files v1.0.1

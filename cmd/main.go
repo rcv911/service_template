@@ -2,10 +2,13 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net"
+	"os"
 	"time"
 
+	"github.com/rcv911/service_template/internal/repository"
 	"github.com/rcv911/service_template/internal/server"
 	"github.com/rcv911/service_template/pkg/pyroscope"
 	"github.com/rcv911/service_template/pkg/sig"
@@ -21,6 +24,11 @@ func main() {
 	httpHost := "localhost:8080"
 	grpcHost := "localhost:8081"
 
+	logger, err := initLogger("info")
+	if err != nil {
+		log.Fatalf("failed to init logger: %v", err)
+	}
+
 	lis, err := net.Listen("tcp", grpcHost)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
@@ -31,7 +39,12 @@ func main() {
 		log.Fatalf("failed dial gRPC client connection: %v", err)
 	}
 
-	grpcServer := server.NewGRPCSServer()
+	repo := repository.New(logger)
+
+	catService := server.NewCatServiceServer(repo)
+	catAdminService := server.NewCatAdminServiceServer(repo)
+
+	grpcServer := server.NewGRPCSServer(catService, catAdminService)
 
 	httpServerCfg := server.Config{
 		Addr:              httpHost,
@@ -78,4 +91,13 @@ func main() {
 	if err = httpServer.Stop(ctx); err != nil {
 		log.Fatalf("failed to shutdown http server: %v", err)
 	}
+}
+
+func initLogger(level string) (zerolog.Logger, error) {
+	l, err := zerolog.ParseLevel(level)
+	if err != nil {
+		return zerolog.Logger{}, fmt.Errorf("getting log level error [%w]", err)
+	}
+
+	return zerolog.New(os.Stdout).Level(l).With().Timestamp().Logger(), nil
 }
